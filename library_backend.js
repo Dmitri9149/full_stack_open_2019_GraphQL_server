@@ -89,14 +89,25 @@ const typeDefs = gql`
     hello: String!
     bookCount:Int!
     authorCount:Int!
+    allBooks:[Book!]!
   }
-`
+
+  type Book {
+    title:String!
+    published:Int!
+    author:String!
+    genres:[String!]!
+    id:ID!
+
+  }
+ `
 
 const resolvers = {
   Query: {
     hello: () => { return "world" },
     bookCount:() => {return books.length },
-    authorCount:()=> {return authors.length}
+    authorCount:()=> {return authors.length},
+    allBooks:() => {return books}
 
   }
 }
