@@ -106,6 +106,17 @@ const typeDefs = gql`
       name:String!
       born:Int
       bookCount:Int!
+      id:ID!
+  }
+
+  type Mutation {
+    addBook(
+      title:String!
+      author:String!
+      published:Int!
+      genres:[String!]!
+
+    ):Book
   }
  `
 
@@ -128,7 +139,7 @@ const resolvers = {
     },
     allAuthors:()=> authors.map(a =>
         {
-            const bookCount = (name) => books.map(b=> b.author).filter(x=>x===name).length
+            const bookCount = (name) => books.map(book=> book.author).filter(a=>a===name).length
              return {...a, bookCount:bookCount(a.name)}
         })
 
