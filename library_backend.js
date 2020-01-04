@@ -1,5 +1,6 @@
 const { ApolloServer, UserInputError, gql } = require('apollo-server')
 const uuid = require('uuid/v1')
+const config = require('./utils/config')
 
 let authors = [
   {
