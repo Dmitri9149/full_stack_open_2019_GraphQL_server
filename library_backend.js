@@ -2,6 +2,22 @@ const { ApolloServer, UserInputError, gql } = require('apollo-server')
 const uuid = require('uuid/v1')
 const config = require('./utils/config')
 
+const mongoose = require('mongoose')
+const Book = require('./models/book')
+const Author = require('./models/author')
+
+mongoose.set('useFindAndModify', false)
+
+logger.info('connecting to', config.MONGODB_URI)
+
+mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
+  .then(() => {
+    console.log("Connected to DB")
+  })
+  .catch((error) => {
+    logger.error('error connection to MongoDB:', error.message)
+  })
+
 let authors = [
   {
     name: 'Robert Martin',
@@ -95,13 +111,13 @@ const typeDefs = gql`
     allAuthors:[Author!]!
   }
 
-
   type Book {
-    title:String!
-    published:Int!
-    author:String!
-    genres:[String!]!
-    id:ID!
+    title: String!
+    published: Int!
+    author: Author!
+    genres: [String!]!
+    id: ID!
+  }
 
   }
   type Author {
@@ -157,15 +173,8 @@ const resolvers = {
           invalidArgs:args.title })
       }
 
-      const book = {...args, id:uuid()}
-      books = books.concat(book)
-
-      if (!authors.find(a=> a.name === args.author)) {
-        const author = {name:args.author, born:null, id:uuid()}
-        authors = authors.concat(author)
-      }
-
-      return book
+      const book = new Book({...args})
+      return book.save()
     },
     editAuthor:(root, args)=> {
       const author = authors.find(a=> a.name === args.name)
