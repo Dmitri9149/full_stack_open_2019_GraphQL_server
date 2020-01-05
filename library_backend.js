@@ -107,7 +107,7 @@ const typeDefs = gql`
     hello: String!
     bookCount:Int!
     authorCount:Int!
-    allBooks(author:String, genre:String):[Book!]!
+    allBooks:[Book!]!
     allAuthors:[Author!]!
   }
 
@@ -145,51 +145,39 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     hello: () => { return "world" },
-    bookCount:() => {return books.length },
-    authorCount:()=> {return authors.length},
-    allBooks:(root, args) => {
-        if (!args.author&&!args.genre) {
-            return books
-        } else if (args.author&&!args.genre) {
-            return books.filter( book=> book.author === args.author)
-        } else if (!args.author&&args.genre) {
-            return books.filter(book=> book.genres.find(genre => genre === args.genre))
-        } else {
-            const authorBooks = books.filter(book => book.author === args.author)
-            return authorBooks.filter(book=> book.genres.find(genre => genre === args.genre))
-        }
+    bookCount:() => Author.collections.countDocuments(),
+    authorCount:()=> Book.collections.countDocuments(),
+    allBooks:() => {
+      return Book.find({})  
     },
-    allAuthors:()=> authors.map(a =>
-        {
-            const bookCount = (name) => books.map(book=> book.author).filter(a=>a===name).length
-             return {...a, bookCount:bookCount(a.name)}
-        }),
+    allAuthors:() => {
+      return Author.find({})
+    },
   },
+Book:{
+  author:root => {
+    return {id:root.author}
+  }
+},
   Mutation: {
-    addBook:(root, args)=> {
-      if (books.find(b=> b.title === args.title)) {
-        throw new UserInputError ('Title must be unique!', {
-          invalidArgs:args.title })
+    addBook: async (root, args)=> {
+      let author = await Author.findOne({name:args.author})
+      console.log('let author ', author)
+      if (typeof author === 'undefined'|| author === null) {
+        console.log('name:', args.author)
+        author = new Author({name:args.author})
+        console.log('New Author', author)
+        await author.save()
       }
-
-      const book = new Book({...args})
-      return book.save()
+      const book = new Book({...args, author:author})
+      await book.save()
     },
     editAuthor:(root, args)=> {
-      const author = authors.find(a=> a.name === args.name)
-      console.log(author)
-      if(!author) {
-        return null
-      } else { 
-        const author_new = {...author, born:args.setBornTo}
-        console.log(author_new)
-        authors = authors.map(a=> a.name === args.name ?author_new :a)
-        return (author_new)
+      console.log('edit Author request')
       }
 
-    }
-  } 
-}
+  }
+} 
 
 const server = new ApolloServer({
   typeDefs,
