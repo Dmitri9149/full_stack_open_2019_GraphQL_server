@@ -119,7 +119,6 @@ const typeDefs = gql`
     id: ID!
   }
 
-  }
   type Author {
       name:String!
       born:Int
