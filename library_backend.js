@@ -8,14 +8,14 @@ const Author = require('./models/author')
 
 mongoose.set('useFindAndModify', false)
 
-logger.info('connecting to', config.MONGODB_URI)
+console.log('connecting to', config.MONGODB_URI)
 
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
   .then(() => {
     console.log("Connected to DB")
   })
   .catch((error) => {
-    logger.error('error connection to MongoDB:', error.message)
+    console.log('error connection to MongoDB:', error.message)
   })
 
 let authors = [
