@@ -25,7 +25,7 @@ const typeDefs = gql`
     hello: String!
     bookCount:Int!
     authorCount:Int!
-    allBooks:[Book!]!
+    allBooks(author:String, genre:String):[Book!]!
     allAuthors:[Author!]!
   }
 
@@ -72,11 +72,7 @@ const resolvers = {
       return Author.find({})
     },
   },
-Book:{
-  author:root => {
-    return {id:root.author}
-  }
-},
+
   Mutation: {
     addBook: async (root, args)=> {
       let author = await Author.findOne({name:args.author})
