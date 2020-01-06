@@ -1,4 +1,4 @@
-const { ApolloServer, UserInputError, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, gql, AuthenticationError } = require('apollo-server')
 const uuid = require('uuid/v1')
 const config = require('./utils/config')
 
@@ -33,6 +33,7 @@ const typeDefs = gql`
     authorCount:Int!
     allBooks(author:String, genre:String):[Book!]!
     allAuthors:[Author!]!
+    me: User
   }
 
   type Book {
@@ -85,10 +86,6 @@ const typeDefs = gql`
     value: String!
   }
   
-  type Query {
-    // ..
-    me: User
-  }
  `
 
 const resolvers = {
@@ -114,7 +111,7 @@ const resolvers = {
       if (!currentUser) {
         throw new AuthenticationError("not authenticated")
       }
-      
+
       const tryAuthor = await Author.findOne({name:args.author})
       console.log('try author ', tryAuthor)
 
