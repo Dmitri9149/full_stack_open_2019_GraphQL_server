@@ -147,7 +147,17 @@ const resolvers = {
         })
       }
 
-    }
+    },
+    createUser: (root, args) => {
+      const user = new User({ username: args.username })
+  
+      return user.save()
+        .catch(error => {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        })
+    },
   },
   Author: {
     bookCount: (root)=> Book.countDocuments({author:root})
