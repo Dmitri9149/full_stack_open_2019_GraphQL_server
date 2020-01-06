@@ -89,9 +89,14 @@ const resolvers = {
       await book.save()
     },
     editAuthor:(root, args)=> {
-      console.log('edit Author request')
-      }
+      const author = Author.findOne({name:args.name})
+      author.born = args.setBornTo
 
+      if (!author) {return null}
+
+      await author.save()
+
+    }
   },
   Author: {
     bookCount: (root)=> Book.countDocuments({author:root})
