@@ -9,12 +9,11 @@ const User = require('./models/user')
 
 const jwt = require('jsonwebtoken')
 
-const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
-
 
 mongoose.set('useFindAndModify', false)
 
-console.log('connecting to', config.MONGODB_URI)
+console.log('connecting to:', config.MONGODB_URI)
+console.log('secret in use:', config.JWT_SECRET)
 
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
   .then(() => {
@@ -23,6 +22,10 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
   .catch((error) => {
     console.log('error connection to MongoDB:', error.message)
   })
+
+const JWT_SECRET = config.JWT_SECRET
+
+console.log('JWT_SECRET: ', JWT_SECRET)
 
 
 
