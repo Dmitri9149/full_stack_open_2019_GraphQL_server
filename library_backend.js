@@ -82,11 +82,25 @@ const resolvers = {
         console.log('name:', args.author)
         const author = new Author({name:args.author})
         console.log('New Author', author)
-        await author.save()
+
+        try {
+          await author.save()
+        } catch (error) {
+          throw new UserInputError(eror.message, {
+            invalidArgs:args
+          })
+        }
       }
       const existAuthor = await Author.findOne({name:args.author})
       const book = new Book({...args, author:existAuthor})
-      await book.save()
+
+      try {
+        await book.save()
+      } catch (error) {
+        throw new UserInputError(eror.message, {
+          invalidArgs:args
+        })
+      }
     },
     editAuthor:async (root, args)=> {
       const author = await Author.findOne({name:args.name})
@@ -94,7 +108,14 @@ const resolvers = {
 
       if (!author) {return null}
 
-      return await author.save()
+      try {
+        await author.save()
+      } catch (error) {
+        throw new UserInputError(eror.message, {
+          invalidArgs:args
+        })
+      }
+
     }
   },
   Author: {
