@@ -92,6 +92,9 @@ const resolvers = {
       console.log('edit Author request')
       }
 
+  },
+  Author: {
+    bookCount: (root)=> Book.countDocuments({author:root})
   }
 } 
 
