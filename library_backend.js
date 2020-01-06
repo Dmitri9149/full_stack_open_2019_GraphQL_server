@@ -5,6 +5,12 @@ const config = require('./utils/config')
 const mongoose = require('mongoose')
 const Book = require('./models/book')
 const Author = require('./models/author')
+const User = require('./models/user')
+
+const jwt = require('jsonwebtoken')
+
+const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
+
 
 mongoose.set('useFindAndModify', false)
 
@@ -61,7 +67,7 @@ const typeDefs = gql`
       username: String!
       favoriteGenre: String!
     ): User
-    
+
     login(
       username: String!
       password: String!
