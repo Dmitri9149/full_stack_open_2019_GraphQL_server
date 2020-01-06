@@ -57,6 +57,31 @@ const typeDefs = gql`
       setBornTo:Int!
     ):Author
 
+    createUser(
+      username: String!
+      favoriteGenre: String!
+    ): User
+    
+    login(
+      username: String!
+      password: String!
+    ): Token
+
+  }
+
+  type User {
+    username: String!
+    favoriteGenre: String!
+    id: ID!
+  }
+  
+  type Token {
+    value: String!
+  }
+  
+  type Query {
+    // ..
+    me: User
   }
  `
 
@@ -121,6 +146,8 @@ const resolvers = {
   Author: {
     bookCount: (root)=> Book.countDocuments({author:root})
   }
+
+  
 } 
 
 const server = new ApolloServer({
