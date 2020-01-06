@@ -89,13 +89,12 @@ const resolvers = {
       await book.save()
     },
     editAuthor:async (root, args)=> {
-      const author = Author.findOne({name:args.name})
+      const author = await Author.findOne({name:args.name})
       author.born = args.setBornTo
 
       if (!author) {return null}
 
-      await author.save()
-
+      return await author.save()
     }
   },
   Author: {
