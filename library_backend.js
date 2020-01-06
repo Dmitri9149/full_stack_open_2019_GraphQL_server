@@ -65,8 +65,8 @@ const resolvers = {
     hello: () => { return "world" },
     bookCount:() => Author.collections.countDocuments(),
     authorCount:()=> Book.collections.countDocuments(),
-    allBooks:(root, args) => {
-      return Book.find({}).populate('author')  
+    allBooks: async (root, args) => {
+      return await Book.find({}).populate('author')  
     },
     allAuthors:() => {
       return Author.find({})
