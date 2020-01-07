@@ -141,6 +141,8 @@ const resolvers = {
           invalidArgs:args
         })
       }
+
+      return book
     },
     editAuthor:async (root, args, context)=> {
       const currentUser = context.currentUser
@@ -161,6 +163,8 @@ const resolvers = {
           invalidArgs:args
         })
       }
+
+      return author
 
     },
     createUser: (root, args) => {
