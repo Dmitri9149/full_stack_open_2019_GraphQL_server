@@ -182,6 +182,8 @@ const resolvers = {
       const user = await User.findOne({ username: args.username })
   
       if ( !user || args.password !== 'secred' ) {
+        console.log('User:', user)
+        console.log('Password:', args.password)
         throw new UserInputError("wrong credentials")
       }
   
