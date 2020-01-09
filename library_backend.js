@@ -102,6 +102,9 @@ const resolvers = {
     allAuthors:() => {
       return Author.find({})
     },
+
+// 8.21 ex , possible implementation at backend
+//***********
 //    allBooks:(root, args) => {
 //      if (!args.author&&!args.genre) {
 //          return books
