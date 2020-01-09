@@ -102,6 +102,18 @@ const resolvers = {
     allAuthors:() => {
       return Author.find({})
     },
+//    allBooks:(root, args) => {
+//      if (!args.author&&!args.genre) {
+//          return books
+//      } else if (args.author&&!args.genre) {
+//          return books.filter( book=> book.author === args.author)
+//      } else if (!args.author&&args.genre) {
+//          return books.filter(book=> book.genres.find(genre => genre === args.genre))
+//      } else {
+//          const authorBooks = books.filter(book => book.author === args.author)
+//          return authorBooks.filter(book=> book.genres.find(genre => genre === args.genre))
+//      }
+//  },
     me: (root, args, context) => {
       return context.currentUser
     }
